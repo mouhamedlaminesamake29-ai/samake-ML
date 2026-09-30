@@ -2,7 +2,7 @@ import os
 from flask import Flask, request, redirect, url_for, session, render_template_string
 
 app = Flask(__name__)
-app.secret_key = 'reussite_samake_secret_key_2026'
+app.secret_key = 'reussite_samake_ultra_secure_key_2026'
 
 CODE_PIN_VALIDE = "2026"
 
@@ -12,28 +12,111 @@ PAGE_CONNEXION_HTML = """
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Connexion - Réussite+</title>
+    <title>Accès Sécurisé - Réussite+</title>
     <style>
-        body { font-family: Arial, sans-serif; background: #f4f6f9; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center; width: 300px; }
-        h2 { margin-bottom: 20px; color: #333; }
-        input[type="password"] { width: 100%; padding: 12px; font-size: 18px; text-align: center; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; margin-bottom: 15px; letter-spacing: 4px; }
-        button { width: 100%; padding: 12px; font-size: 16px; background: #007bff; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
-        button:hover { background: #0056b3; }
-        .error { color: #d9534f; margin-bottom: 15px; font-size: 14px; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { background: white; padding: 40px 30px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; width: 320px; }
+        h2 { margin-bottom: 10px; color: #2c3e50; font-size: 24px; }
+        p { color: #7f8c8d; font-size: 14px; margin-bottom: 25px; }
+        input[type="password"] { width: 100%; padding: 14px; font-size: 24px; text-align: center; border: 2px solid #dcdde1; border-radius: 8px; box-sizing: border-box; margin-bottom: 20px; letter-spacing: 8px; outline: none; transition: border-color 0.3s; }
+        input[type="password"]:focus { border-color: #3498db; }
+        button { width: 100%; padding: 14px; font-size: 16px; background: #3498db; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: background 0.3s; }
+        button:hover { background: #2980b9; }
+        .error { background: #ffeaa7; color: #d63031; padding: 10px; border-radius: 6px; margin-bottom: 20px; font-size: 14px; font-weight: bold; }
     </style>
 </head>
 <body>
     <div class="card">
-        <h2>Entrez le code PIN</h2>
+        <h2>Réussite+</h2>
+        <p>Veuillez entrer votre code PIN</p>
         {% if erreur %}
             <div class="error">{{ erreur }}</div>
         {% endif %}
         <form method="POST">
-            <input type="password" name="pin" placeholder="••••" maxlength="8" required autofocus autocomplete="off">
-            <button type="submit">Valider</button>
+            <input type="password" name="pin" placeholder="••••" maxlength="4" required autofocus autocomplete="off">
+            <button type="submit">Déverrouiller</button>
         </form>
     </div>
+</body>
+</html>
+"""
+
+PAGE_ACCUEIL_HTML = """
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planning & Organisation - Réussite+</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f6f9; margin: 0; padding: 20px; color: #333; }
+        .container { max-width: 700px; margin: 0 auto; background: white; padding: 30px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        h1 { color: #2c3e50; text-align: center; }
+        .planner-section { margin-top: 30px; border-top: 2px solid #eee; padding-top: 20px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; color: #555; }
+        input, select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
+        .btn-add { background: #2ecc71; color: white; padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; }
+        .btn-add:hover { background: #27ae60; }
+        ul { list-style: none; padding: 0; margin-top: 20px; }
+        li { background: #f9f9f9; padding: 12px; margin-bottom: 10px; border-radius: 6px; border-left: 5px solid #3498db; display: flex; justify-content: space-between; align-items: center; }
+        .btn-logout { display: block; text-align: center; margin-top: 40px; color: #e74c3c; text-decoration: none; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Réussite+ : Planning d'Études</h1>
+        <p style="text-align: center; color: #7f8c8d;">Organisez vos révisions et planifiez vos alertes de travail.</p>
+        
+        <div class="planner-section">
+            <h3>Ajouter une session de révision</h3>
+            <div class="form-group">
+                <label for="matiere">Matière ou Tâche :</label>
+                <input type="text" id="matiere" placeholder="Ex: Sciences Physiques / Mathématiques">
+            </div>
+            <div class="form-group">
+                <label for="heure">Heure de l'alarme / rappel :</label>
+                <input type="time" id="heure">
+            </div>
+            <button class="btn-add" onclick="ajouterTache()"> Programmer l'alarme</button>
+        </div>
+
+        <div class="planner-section">
+            <h3>Mes Révisions Programmées</h3>
+            <ul id="listeTaches">
+                <li style="color: #999;">Aucune tâche pour le moment. Ajoutez votre premier planning ci-dessus !</li>
+            </ul>
+        </div>
+
+        <a href="/deconnexion" class="btn-logout">Se déconnecter</a>
+    </div>
+
+    <script>
+        function ajouterTache() {
+            const matiere = document.getElementById('matiere').value;
+            const heure = document.getElementById('heure').value;
+            
+            if (!matiere || !heure) {
+                alert("Veuillez remplir la matière et l'heure !");
+                return;
+            }
+
+            const liste = document.getElementById('listeTaches');
+            if (liste.innerHTML.includes("Aucune tâche")) {
+                liste.innerHTML = "";
+            }
+
+            const li = document.createElement('li');
+            li.innerHTML = `<span><strong>${matiere}</strong> - Prévu à ${heure}</span> <span style="color: #27ae60; font-weight: bold;">⏰ Actif</span>`;
+            liste.appendChild(li);
+
+            // Nettoyer les champs
+            document.getElementById('matiere').value = '';
+            document.getElementById('heure').value = '';
+
+            alert("Session planifiée avec succès ! L'alarme visuelle est active.");
+        }
+    </script>
 </body>
 </html>
 """
@@ -42,10 +125,7 @@ PAGE_CONNEXION_HTML = """
 def index():
     if not session.get('authentifie'):
         return redirect(url_for('connexion'))
-    try:
-        return render_template('index.html')
-    except Exception:
-        return "<h1>Bienvenue sur Réussite+</h1><p>Connexion réussie avec succès !</p><a href='/deconnexion'>Déconnexion</a>"
+    return render_template_string(PAGE_ACCUEIL_HTML)
 
 @app.route('/connexion', methods=['GET', 'POST'])
 def connexion():
@@ -56,7 +136,7 @@ def connexion():
             session['authentifie'] = True
             return redirect(url_for('index'))
         else:
-            erreur = "Code PIN incorrect."
+            erreur = "Code PIN incorrect !"
             
     return render_template_string(PAGE_CONNEXION_HTML, erreur=erreur)
 
