@@ -66,25 +66,25 @@ PAGE_ACCUEIL_HTML = """
 <body>
     <div class="container">
         <h1>Réussite+ : Planning d'Études</h1>
-        <p style="text-align: center; color: #7f8c8d;">Organisez vos révisions et planifiez vos alertes de travail.</p>
+        <p style="text-align: center; color: #7f8c8d;">Organisez vos révisions et recevez vos alertes de travail.</p>
         
         <div class="planner-section">
-            <h3>Ajouter une session de révision</h3>
+            <h3>Programmer une session</h3>
             <div class="form-group">
                 <label for="matiere">Matière ou Tâche :</label>
-                <input type="text" id="matiere" placeholder="Ex: Sciences Physiques / Mathématiques">
+                <input type="text" id="matiere" placeholder="Ex: Mathématiques / Physique">
             </div>
             <div class="form-group">
-                <label for="heure">Heure de l'alarme / rappel :</label>
+                <label for="heure">Heure de l'alarme :</label>
                 <input type="time" id="heure">
             </div>
-            <button class="btn-add" onclick="ajouterTache()"> Programmer l'alarme</button>
+            <button class="btn-add" onclick="ajouterTache()">Activer l'alarme</button>
         </div>
 
         <div class="planner-section">
-            <h3>Mes Révisions Programmées</h3>
+            <h3>Mes Révisions en Cours</h3>
             <ul id="listeTaches">
-                <li style="color: #999;">Aucune tâche pour le moment. Ajoutez votre premier planning ci-dessus !</li>
+                <li style="color: #999;">Aucune tâche programmée.</li>
             </ul>
         </div>
 
@@ -92,6 +92,8 @@ PAGE_ACCUEIL_HTML = """
     </div>
 
     <script>
+        let taches = [];
+
         function ajouterTache() {
             const matiere = document.getElementById('matiere').value;
             const heure = document.getElementById('heure').value;
@@ -101,21 +103,40 @@ PAGE_ACCUEIL_HTML = """
                 return;
             }
 
-            const liste = document.getElementById('listeTaches');
-            if (liste.innerHTML.includes("Aucune tâche")) {
-                liste.innerHTML = "";
-            }
+            taches.push({ matiere: matiere, heure: heure, sonne: false });
+            mettreAJourAffichage();
 
-            const li = document.createElement('li');
-            li.innerHTML = `<span><strong>${matiere}</strong> - Prévu à ${heure}</span> <span style="color: #27ae60; font-weight: bold;">⏰ Actif</span>`;
-            liste.appendChild(li);
-
-            // Nettoyer les champs
             document.getElementById('matiere').value = '';
             document.getElementById('heure').value = '';
-
-            alert("Session planifiée avec succès ! L'alarme visuelle est active.");
+            alert("Alarme enregistrée avec succès ! Gardez la page ouverte pour recevoir l'alerte.");
         }
+
+        function mettreAJourAffichage() {
+            const liste = document.getElementById('listeTaches');
+            if (taches.length === 0) {
+                liste.innerHTML = '<li style="color: #999;">Aucune tâche programmée.</li>';
+                return;
+            }
+            liste.innerHTML = '';
+            taches.forEach((t) => {
+                liste.innerHTML += `<li><span><strong>${t.matiere}</strong> - Prévu à ${t.heure}</span> <span style="color: #27ae60; font-weight: bold;">⏰ Actif</span></li>`;
+            });
+        }
+
+        // Vérification automatique toutes les 10 secondes pour déclencher l'alarme
+        setInterval(() => {
+            const maintenant = new Date();
+            const heures = String(maintenant.getHours()).padStart(2, '0');
+            const minutes = String(maintenant.getMinutes()).padStart(2, '0');
+            const heureActuelle = `${heures}:${minutes}`;
+
+            taches.forEach((t) => {
+                if (t.heure === heureActuelle && !t.sonne) {
+                    t.sonne = true; // Empêche de répéter l'alarme en boucle
+                    alert(`🚨 ALARME RÉVISION : C'est l'heure de travailler la matière : ${t.matiere} !`);
+                }
+            });
+        }, 10000);
     </script>
 </body>
 </html>
